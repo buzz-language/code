@@ -1,0 +1,49 @@
+{
+  "name": "buzz",
+  "displayName": "buzz",
+  "description": "Language support for the buzz programming language",
+  "version": "0.0.1",
+  "publisher": "giann",
+  "license": "SEE LICENSE IN LICENSE.txt",
+  "homepage": "https://github.com/buzz-language/code/blob/main/README.md",
+  "bugs": {
+    "url": "https://github.com/buzz-language/code/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/buzz-language/code.git"
+  },
+  "engines": {
+    "vscode": "^1.59.0"
+  },
+  "icon": "https://github.com/buzz-language/code/raw/main/logo.png",
+  "galleryBanner": {
+    "color": "#221328",
+    "theme": "dark"
+  },
+  "categories": ["Programming Languages"],
+  "contributes": {
+    "languages": [
+      {
+        "id": "buzz",
+        "aliases": ["buzz", "buzz"],
+        "extensions": ["buzz"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "buzz",
+        "scopeName": "source.buzz",
+        "path": "./syntaxes/buzz.tmLanguage.json"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run esbuild-base -- --minify",
+    "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
+    "esbuild": "npm run esbuild-base -- --sourcemap",
+    "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
+    "test-compile": "tsc -p ./"
+  }
+}

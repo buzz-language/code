@@ -74,7 +74,7 @@
         },
         {
           "name": "storage.type.built-in.primitive.buzz",
-          "match": "\\b(ud|str|num|obj|fib|bool|type|pat)\\b\\??"
+          "match": "\\b(ud|str|int|float|obj|fib|bool|type|pat)\\b\\??"
         }
       ]
     },

@@ -6,6 +6,15 @@
       "include": "#functions"
     },
     {
+      "include": "#objects"
+    },
+    {
+      "include": "#enum"
+    },
+    {
+      "include": "#protocols"
+    },
+    {
       "include": "#keywords"
     },
     {
@@ -38,7 +47,7 @@
       "patterns": [
         {
           "name": "keyword.control.buzz",
-          "match": "\\b(void|static|const|extern|import|export|from|test|as|in|while|if|else|fun|try|catch|throw|constructor|return|switch|default|break|for|foreach|do|until|continue|resolve|resume|yield)\\b"
+          "match": "\\b(void|static|const|extern|import|export|from|test|as|in|while|if|else|fun|try|catch|throw|constructor|return|switch|default|break|for|foreach|do|until|continue|resolve|resume|yield|any)\\b"
         },
         {
           "name": "keyword.operator.assignment.buzz",
@@ -49,7 +58,7 @@
           "match": "\\b(!|and|or|band|bor|xor|\\?\\?)\\b"
         },
         {
-          "name": "keyword.operator.closure.dart",
+          "name": "keyword.operator.closure.buzz",
           "match": "(->)"
         },
         {
@@ -61,7 +70,7 @@
           "match": "(==|!=|<=?|>=?|\\bis|\\?\\?)"
         },
         {
-          "name": "keyword.declaration.dart",
+          "name": "keyword.declaration.buzz",
           "match": "\\b(enum|object|protocol)\\b"
         },
         {
@@ -200,7 +209,7 @@
     },
     "functions": {
       "name": "meta.function.buzz",
-      "match": "\\b(fun)\\b \\b([a-zA-Z][a-zA-Z0-9]*)\\b\\(",
+      "match": "\\b(fun)\\b\\s+\\b([a-zA-Z][a-zA-Z0-9]+)\\b\\s*\\(",
       "captures": {
         "1": {
           "name": "keyword.control.buzz"
@@ -209,6 +218,69 @@
           "name": "entity.name.function.buzz meta.definition.function.buzz"
         }
       }
+    },
+    "objects": {
+      "name": "meta.class.buzz",
+      "match": "\\b(object)\\b\\s*(\\((\\b([a-zA-Z][a-zA-Z0-9]+)\\b(\\s*,\\s*)?)+\\))?\\s+\\b([a-zA-Z][a-zA-Z0-9]+)\\b\\s*\\{",
+      "captures": {
+        "1": {
+          "name": "storage.type.class.buzz"
+        },
+        "2": {
+          "patterns": [
+            {
+              "include": "#inherited"
+            }
+          ]
+        },
+        "6": {
+          "name": "entity.name.class.buzz meta.definition.class.buzz"
+        }
+      }
+    },
+    "enum": {
+      "name": "meta.enum.buzz",
+      "match": "\\b(enum)\\b\\s*(\\(\\b([a-zA-Z][a-zA-Z0-9]+)\\b\\))?\\s+\\b([a-zA-Z][a-zA-Z0-9]+)\\b\\s*\\{",
+      "captures": {
+        "1": {
+          "name": "storage.type.enum.buzz"
+        },
+        "2": {
+          "patterns": [
+            {
+              "match": "\\b(int|str)\\b",
+              "name": "storage.type.buzz"
+            }
+          ]
+        },
+        "4": {
+          "name": "entity.name.type.enum.buzz"
+        }
+      }
+    },
+    "protocols": {
+      "name": "meta.interface.buzz",
+      "match": "\\b(protocol)\\b\\s+\\b([a-zA-Z][a-zA-Z0-9]+)\\b\\s*\\{",
+      "captures": {
+        "1": {
+          "name": "keyword.control.buzz"
+        },
+        "2": {
+          "name": "entity.name.interface.buzz"
+        }
+      }
+    },
+    "inherited": {
+      "patterns": [
+        {
+          "match": "\\b([a-zA-Z][a-zA-Z0-9]+)\\b",
+          "captures": {
+            "1": {
+              "name": "entity.other.inherited-class"
+            }
+          }
+        }
+      ]
     }
   },
   "scopeName": "source.buzz"

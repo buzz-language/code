@@ -3,10 +3,13 @@
   "name": "buzz",
   "patterns": [
     {
-      "include": "#functions"
+      "include": "#zdef"
     },
     {
-      "include": "#function-call"
+      "include": "#multiline-zdef"
+    },
+    {
+      "include": "#functions"
     },
     {
       "include": "#objects"
@@ -19,9 +22,6 @@
     },
     {
       "include": "#keywords"
-    },
-    {
-      "include": "storage_types"
     },
     {
       "include": "#strings"
@@ -43,6 +43,9 @@
     },
     {
       "include": "#patterns"
+    },
+    {
+      "include": "#function-call"
     }
   ],
   "repository": {
@@ -50,7 +53,7 @@
       "patterns": [
         {
           "name": "keyword.control.buzz",
-          "match": "\\b(void|static|const|extern|import|export|from|test|as|in|while|if|else|fun|try|catch|throw|constructor|return|switch|default|break|for|foreach|do|until|continue|resolve|resume|yield|any)\\b"
+          "match": "\\b(typeof|type|zdef|void|static|const|extern|import|export|from|test|as|in|while|if|else|fun|try|catch|throw|constructor|return|switch|default|break|for|foreach|do|until|continue|resolve|resume|yield|any)\\b"
         },
         {
           "name": "keyword.operator.assignment.buzz",
@@ -70,7 +73,7 @@
         },
         {
           "name": "keyword.operator.comparison.buzz",
-          "match": "(==|!=|<=?|>=?|\\bis|\\?\\?)"
+          "match": "(==|!=|<=?|>=?|\\bis\\b|\\?\\?)"
         },
         {
           "name": "keyword.declaration.buzz",
@@ -86,7 +89,7 @@
         },
         {
           "name": "storage.type.built-in.primitive.buzz",
-          "match": "\\b(ud|str|int|float|obj|fib|bool|type|pat)\\b\\??"
+          "match": "\\b(ud|str|int|float|obj|fib|bool|pat)\\b\\??"
         }
       ]
     },
@@ -97,9 +100,6 @@
           "begin": "\\{",
           "end": "\\}",
           "patterns": [
-            {
-              "include": "#identifier"
-            },
             {
               "include": "#keywords"
             },
@@ -117,6 +117,9 @@
             },
             {
               "include": "#patterns"
+            },
+            {
+              "include": "#function-call"
             }
           ]
         }
@@ -124,8 +127,8 @@
     },
     "patterns": {
       "name": "string.regexp.buzz",
-      "begin": "_",
-      "end": "_",
+      "begin": "\\$\"",
+      "end": "\"",
       "patterns": [
         {
           "name": "constant.character.escape.buzz",
@@ -174,17 +177,13 @@
         },
         {
           "name": "constant.numeric.hexa.buzz",
-          "match": "\\b0x[0-9A-F]+\\b"
+          "match": "\\b0x[0-9A-Fa-f]+\\b"
         }
       ]
     },
     "comment": {
       "name": "comment.line.buzz",
       "match": "\\|[^\n]*"
-    },
-    "identifier": {
-      "name": "entity.name.buzz",
-      "match": "\\b[a-zA-Z][a-zA-Z0-9]+\\b"
     },
     "punctuation": {
       "patterns": [
@@ -251,7 +250,7 @@
         "2": {
           "patterns": [
             {
-              "match": "\\b(int|str)\\b",
+              "match": "\\b(uint|int|str)\\b",
               "name": "storage.type.buzz"
             }
           ]
@@ -287,13 +286,46 @@
     },
     "function-call": {
       "name": "meta.function-call.buzz",
-      "begin": "\\b((?!\\b(void|static|const|extern|import|export|from|test|as|in|while|if|else|fun|try|catch|throw|constructor|return|switch|default|break|for|foreach|do|until|continue|resolve|resume|yield|and|or|band|bor|xor|enum|object|protocol|this|ud|str|int|float|obj|fib|bool|type|pat|any|is)\\b)[a-zA-Z][a-zA-Z0-9]+)\\b\\s*\\(",
-      "beginCaptures": {
+      "match": "(\\b[a-zA-Z][a-zA-Z0-9_]+\\b)\\s*\\(",
+      "captures": {
         "1": {
           "name": "entity.name.function.js"
         }
+      }
+    },
+    "zdef": {
+      "begin": "\\b(zdef)\\b\\s*\\(\\s*(\"[a-zA-Z_0-9/\\\\\\.]+\")\\s*,\\s*\"",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.buzz"
+        },
+        "2": {
+          "name": "string.quoted.double.buzz"
+        }
       },
-      "end": "\\)"
+      "end": "\"\\s*\\)[\\n\\r\\s]*;",
+      "patterns": [
+        {
+          "include": "source.zig"
+        }
+      ]
+    },
+    "multiline-zdef": {
+      "begin": "\\b(zdef)\\b\\s*\\(\\s*(\"[a-zA-Z_0-9/\\\\\\.]+\")\\s*,\\s*`",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.buzz"
+        },
+        "2": {
+          "name": "string.quoted.double.buzz"
+        }
+      },
+      "end": "`\\s*\\)[\\n\\r\\s]*;",
+      "patterns": [
+        {
+          "include": "source.zig"
+        }
+      ]
     }
   },
   "scopeName": "source.buzz"

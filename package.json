@@ -42,7 +42,10 @@
       {
         "language": "buzz",
         "scopeName": "source.buzz",
-        "path": "./syntaxes/buzz.tmLanguage.json"
+        "path": "./syntaxes/buzz.tmLanguage.json",
+        "embeddedLanguages": {
+          "source.zig": "zig"
+        }
       }
     ]
   }

@@ -27,6 +27,9 @@
       "include": "#strings"
     },
     {
+      "include": "#chars"
+    },
+    {
       "include": "#multiline-strings"
     },
     {
@@ -53,7 +56,11 @@
       "patterns": [
         {
           "name": "keyword.control.buzz",
-          "match": "\\b(typeof|type|zdef|void|static|const|extern|import|export|from|test|as|in|while|if|else|fun|try|catch|throw|constructor|return|switch|default|break|for|foreach|do|until|continue|resolve|resume|yield|any)\\b"
+          "match": "\\b(typeof|type|zdef|void|static|var|const|extern|import|export|from|test|as|in|while|if|else|fun|try|catch|throw|constructor|return|switch|default|break|for|foreach|do|until|continue|resolve|resume|yield|any)\\b"
+        },
+        {
+          "name": "keyword.types.buzz",
+          "match": "\\b(void|static|var|const|extern|import|export|from|test|as|in|while|if|else|fun|try|catch|throw|constructor|return|switch|default|break|for|foreach|do|until|continue|resolve|resume|yield)\\b"
         },
         {
           "name": "keyword.operator.assignment.buzz",
@@ -65,7 +72,7 @@
         },
         {
           "name": "keyword.operator.closure.buzz",
-          "match": "(->)"
+          "match": "(->|::)"
         },
         {
           "name": "keyword.operator.arithmetic.buzz",
@@ -89,7 +96,7 @@
         },
         {
           "name": "storage.type.built-in.primitive.buzz",
-          "match": "\\b(ud|str|int|float|obj|fib|bool|pat)\\b\\??"
+          "match": "\\b(ud|str|int|float|obj|fib|bool|pat|type|any)\\b\\??"
         }
       ]
     },
@@ -101,19 +108,31 @@
           "end": "\\}",
           "patterns": [
             {
+              "include": "#functions"
+            },
+            {
+              "include": "#objects"
+            },
+            {
               "include": "#keywords"
-            },
-            {
-              "include": "#numeric"
-            },
-            {
-              "include": "#punctuation"
             },
             {
               "include": "#strings"
             },
             {
+              "include": "#chars"
+            },
+            {
               "include": "#multiline-strings"
+            },
+            {
+              "include": "#punctuation"
+            },
+            {
+              "include": "#numeric"
+            },
+            {
+              "include": "#builtins"
             },
             {
               "include": "#patterns"
@@ -147,6 +166,17 @@
         },
         {
           "include": "#string-interp"
+        }
+      ]
+    },
+    "chars": {
+      "name": "string.quoted.single.buzz",
+      "begin": "'",
+      "end": "'",
+      "patterns": [
+        {
+          "name": "constant.character.escape.buzz",
+          "match": "\\\\."
         }
       ]
     },
@@ -209,21 +239,44 @@
       "match": "\\b(assert|print)\\b",
       "name": "support.function.buzz"
     },
+    "function-call": {
+      "name": "meta.function-call.buzz",
+      "match": "(\\b[a-zA-Z][a-zA-Z0-9_]+\\b)\\s*(::<([^,>]+,?)+>)?\\s*\\(",
+      "captures": {
+        "1": {
+          "name": "entity.name.function.buzz"
+        },
+        "2": {
+          "patterns": [
+            {
+              "includes": "#keywords"
+            }
+          ]
+        }
+      }
+    },
     "functions": {
       "name": "meta.function.buzz",
-      "match": "\\b(fun)\\b\\s+\\b([a-zA-Z][a-zA-Z0-9]+)\\b\\s*\\(",
+      "match": "\\b(fun)\\b\\s+\\b([a-zA-Z][a-zA-Z0-9]+)\\b\\s*(::<([^,>]+,?)+>)?\\s*\\(",
       "captures": {
         "1": {
           "name": "keyword.control.buzz"
         },
         "2": {
           "name": "entity.name.function.buzz meta.definition.function.buzz"
+        },
+        "3": {
+          "patterns": [
+            {
+              "includes": "#keywords"
+            }
+          ]
         }
       }
     },
     "objects": {
       "name": "meta.class.buzz",
-      "match": "\\b(object)\\b\\s*(\\((\\b([a-zA-Z][a-zA-Z0-9]+)\\b(\\s*,\\s*)?)+\\))?\\s+\\b([a-zA-Z][a-zA-Z0-9]+)\\b\\s*\\{",
+      "match": "\\b(object)\\b\\s*(\\((\\b([a-zA-Z][a-zA-Z0-9]+)\\b(\\s*,\\s*)?)+\\))?\\s+\\b([a-zA-Z][a-zA-Z0-9]+)\\b\\s*(::<([^,>]+,?)+>)?\\s*\\{",
       "captures": {
         "1": {
           "name": "storage.type.class.buzz"
@@ -237,6 +290,16 @@
         },
         "6": {
           "name": "entity.name.class.buzz meta.definition.class.buzz"
+        },
+        "7": {
+          "patterns": [
+            {
+              "include": "#inherited"
+            },
+            {
+              "includes": "#keywords"
+            }
+          ]
         }
       }
     },
@@ -283,15 +346,6 @@
           }
         }
       ]
-    },
-    "function-call": {
-      "name": "meta.function-call.buzz",
-      "match": "(\\b[a-zA-Z][a-zA-Z0-9_]+\\b)\\s*\\(",
-      "captures": {
-        "1": {
-          "name": "entity.name.function.js"
-        }
-      }
     },
     "zdef": {
       "begin": "\\b(zdef)\\b\\s*\\(\\s*(\"[a-zA-Z_0-9/\\\\\\.]+\")\\s*,\\s*\"",

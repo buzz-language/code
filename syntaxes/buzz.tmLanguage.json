@@ -56,7 +56,7 @@
       "patterns": [
         {
           "name": "keyword.control.buzz",
-          "match": "\\b(typeof|type|zdef|void|static|var|const|extern|import|export|from|test|as|in|while|if|else|fun|try|catch|throw|constructor|return|switch|default|break|for|foreach|do|until|continue|resolve|resume|yield|any|out)\\b"
+          "match": "\\b(rg|namespace|typeof|type|zdef|void|static|var|const|extern|import|export|from|test|as|in|while|if|else|fun|try|catch|throw|constructor|return|switch|default|break|for|foreach|do|until|continue|resolve|resume|yield|any|out)\\b"
         },
         {
           "name": "keyword.types.buzz",

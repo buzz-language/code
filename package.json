@@ -2,7 +2,7 @@
   "name": "buzz",
   "displayName": "buzz-language",
   "description": "Language support for the buzz programming language",
-  "version": "0.3.0",
+  "version": "0.5.0",
   "publisher": "giann",
   "license": "MIT",
   "homepage": "https://github.com/buzz-language/code/blob/main/README.md",

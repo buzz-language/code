@@ -4,10 +4,10 @@ Language support for Buzz. Right now only provides syntax highlighting. LSP and 
 
 # Installation
 
-By hand
+Manually
 
 ```bash
-$ git clone https://github.com/buzz-language/code.git ~/.vscode/extensions/giann.buzz-0.0.1
+$ git clone https://github.com/buzz-language/code.git ~/.vscode/extensions/giann.buzz-0.5.0
 ```
 
 Then reload or restart VS Code.

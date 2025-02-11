@@ -3,16 +3,31 @@
   "name": "buzz",
   "patterns": [
     {
+      "include": "#zdef"
+    },
+    {
+      "include": "#multiline-zdef"
+    },
+    {
       "include": "#functions"
+    },
+    {
+      "include": "#objects"
+    },
+    {
+      "include": "#enum"
+    },
+    {
+      "include": "#protocols"
     },
     {
       "include": "#keywords"
     },
     {
-      "include": "storage_types"
+      "include": "#strings"
     },
     {
-      "include": "#strings"
+      "include": "#chars"
     },
     {
       "include": "#multiline-strings"
@@ -31,6 +46,15 @@
     },
     {
       "include": "#patterns"
+    },
+    {
+      "include": "#function-call"
+    },
+    {
+      "include": "#namespace"
+    },
+    {
+      "include": "#qualified"
     }
   ],
   "repository": {
@@ -38,30 +62,30 @@
       "patterns": [
         {
           "name": "keyword.control.buzz",
-          "match": "\\b(void|static|const|extern|import|export|from|test|as|in|while|if|else|fun|try|catch|throw|constructor|return|switch|default|break|for|foreach|do|until|continue|resolve|resume|yield)\\b"
+          "match": "\\b(typeof|type|zdef|void|static|extern|import|export|from|test|as|in|while|if|else|fun|try|catch|throw|constructor|return|switch|default|break|for|foreach|do|until|continue|resolve|resume|yield|any|out|var|final|mut)\\b"
         },
         {
           "name": "keyword.operator.assignment.buzz",
-          "match": "(=|\\+=|\\-=|\\/=|\\*=)"
+          "match": "="
         },
         {
           "name": "keyword.operator.logical.buzz",
-          "match": "\\b(!|and|or|band|bor|xor|\\?\\?)\\b"
+          "match": "\\b(!|and|or|\\?\\?)\\b"
         },
         {
-          "name": "keyword.operator.closure.dart",
-          "match": "(->)"
+          "name": "keyword.operator.closure.buzz",
+          "match": "(=>|::)"
         },
         {
           "name": "keyword.operator.arithmetic.buzz",
-          "match": "(\\+|\\-|\\/|%|\\*|>>|<<|\\\\|\\^|&|~|!>)"
+          "match": "(\\+|\\-|%|\\*|>>|<<|\\||\\^|&|~|!|\\/[^/]|>)"
         },
         {
           "name": "keyword.operator.comparison.buzz",
-          "match": "(==|!=|<=?|>=?|\\bis|\\?\\?)"
+          "match": "(==|!=|<=?|>=?|\\bis\\b|\\?\\?)"
         },
         {
-          "name": "keyword.declaration.dart",
+          "name": "keyword.declaration.buzz",
           "match": "\\b(enum|object|protocol)\\b"
         },
         {
@@ -74,7 +98,7 @@
         },
         {
           "name": "storage.type.built-in.primitive.buzz",
-          "match": "\\b(ud|str|int|float|obj|fib|bool|type|pat)\\b\\??"
+          "match": "\\b(ud|str|int|double|obj|fib|bool|pat|type|any|rg|void)\\b\\??"
         }
       ]
     },
@@ -86,25 +110,37 @@
           "end": "\\}",
           "patterns": [
             {
-              "include": "#identifier"
+              "include": "#functions"
+            },
+            {
+              "include": "#objects"
             },
             {
               "include": "#keywords"
             },
             {
-              "include": "#numeric"
-            },
-            {
-              "include": "#punctuation"
-            },
-            {
               "include": "#strings"
+            },
+            {
+              "include": "#chars"
             },
             {
               "include": "#multiline-strings"
             },
             {
+              "include": "#punctuation"
+            },
+            {
+              "include": "#numeric"
+            },
+            {
+              "include": "#builtins"
+            },
+            {
               "include": "#patterns"
+            },
+            {
+              "include": "#function-call"
             }
           ]
         }
@@ -112,8 +148,8 @@
     },
     "patterns": {
       "name": "string.regexp.buzz",
-      "begin": "_",
-      "end": "_",
+      "begin": "\\$\"",
+      "end": "\"",
       "patterns": [
         {
           "name": "constant.character.escape.buzz",
@@ -132,6 +168,17 @@
         },
         {
           "include": "#string-interp"
+        }
+      ]
+    },
+    "chars": {
+      "name": "string.quoted.single.buzz",
+      "begin": "'",
+      "end": "'",
+      "patterns": [
+        {
+          "name": "constant.character.escape.buzz",
+          "match": "\\\\."
         }
       ]
     },
@@ -162,17 +209,13 @@
         },
         {
           "name": "constant.numeric.hexa.buzz",
-          "match": "\\b0x[0-9A-F]+\\b"
+          "match": "\\b0x[0-9A-Fa-f]+\\b"
         }
       ]
     },
     "comment": {
       "name": "comment.line.buzz",
-      "match": "\\|[^\n]*"
-    },
-    "identifier": {
-      "name": "entity.name.buzz",
-      "match": "\\b[a-zA-Z][a-zA-Z0-9]+\\b"
+      "match": "//[^\n]*"
     },
     "punctuation": {
       "patterns": [
@@ -198,15 +241,180 @@
       "match": "\\b(assert|print)\\b",
       "name": "support.function.buzz"
     },
+    "function-call": {
+      "name": "meta.function-call.buzz",
+      "match": "(\\b[a-zA-Z][a-zA-Z0-9_]+\\b)\\s*(::<([^,>]+,?)+>)?\\s*\\(",
+      "captures": {
+        "1": {
+          "name": "entity.name.function.buzz"
+        },
+        "2": {
+          "patterns": [
+            {
+              "includes": "#keywords"
+            }
+          ]
+        }
+      }
+    },
     "functions": {
       "name": "meta.function.buzz",
-      "match": "\\b(fun)\\b \\b([a-zA-Z][a-zA-Z0-9]*)\\b\\(",
+      "match": "\\b(fun)\\b\\s+\\b([a-zA-Z][a-zA-Z0-9_]+)\\b\\s*(::<([^,>]+,?)+>)?\\s*\\(",
       "captures": {
         "1": {
           "name": "keyword.control.buzz"
         },
         "2": {
           "name": "entity.name.function.buzz meta.definition.function.buzz"
+        },
+        "3": {
+          "patterns": [
+            {
+              "includes": "#keywords"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "name": "meta.class.buzz",
+      "match": "\\b(object)\\b\\s*(\\((\\b([a-zA-Z][a-zA-Z0-9_]+)\\b(\\s*,\\s*)?)+\\))?\\s+\\b([a-zA-Z][a-zA-Z0-9_]+)\\b\\s*(::<([^,>]+,?)+>)?\\s*\\{",
+      "captures": {
+        "1": {
+          "name": "storage.type.class.buzz"
+        },
+        "2": {
+          "patterns": [
+            {
+              "include": "#inherited"
+            }
+          ]
+        },
+        "6": {
+          "name": "entity.name.class.buzz meta.definition.class.buzz"
+        },
+        "7": {
+          "patterns": [
+            {
+              "include": "#inherited"
+            },
+            {
+              "includes": "#keywords"
+            }
+          ]
+        }
+      }
+    },
+    "enum": {
+      "name": "meta.enum.buzz",
+      "match": "\\b(enum)\\b\\s*(\\(\\b([a-zA-Z][a-zA-Z0-9_]+)\\b\\))?\\s+\\b([a-zA-Z][a-zA-Z0-9_]+)\\b\\s*\\{",
+      "captures": {
+        "1": {
+          "name": "storage.type.enum.buzz"
+        },
+        "2": {
+          "patterns": [
+            {
+              "match": "\\b(uint|int|str)\\b",
+              "name": "storage.type.buzz"
+            }
+          ]
+        },
+        "4": {
+          "name": "entity.name.type.enum.buzz"
+        }
+      }
+    },
+    "protocols": {
+      "name": "meta.interface.buzz",
+      "match": "\\b(protocol)\\b\\s+\\b([a-zA-Z][a-zA-Z0-9_]+)\\b\\s*\\{",
+      "captures": {
+        "1": {
+          "name": "keyword.control.buzz"
+        },
+        "2": {
+          "name": "entity.name.interface.buzz"
+        }
+      }
+    },
+    "qualified": {
+      "match": "\\b(([a-zA-Z][a-zA-Z0-9_]*\\\\)+)([a-zA-Z][a-zA-Z0-9_]*)\\b",
+      "captures": {
+        "1": {
+          "name": "entity.name.type.namespace.php",
+          "patterns": [
+            {
+              "match": "\\\\",
+              "name": "punctuation.separator.inheritance.php"
+            }
+          ]
+        },
+        "2": {
+          "name": "entity.name.buzz"
+        }
+      }
+    },
+    "inherited": {
+      "patterns": [
+        {
+          "match": "\\b([a-zA-Z][a-zA-Z0-9_]+)\\b",
+          "captures": {
+            "1": {
+              "name": "entity.other.inherited-class"
+            }
+          }
+        }
+      ]
+    },
+    "zdef": {
+      "begin": "\\b(zdef)\\b\\s*\\(\\s*(\"[a-zA-Z_0-9/\\\\\\.]+\")\\s*,\\s*\"",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.buzz"
+        },
+        "2": {
+          "name": "string.quoted.double.buzz"
+        }
+      },
+      "end": "\"\\s*\\)[\\n\\r\\s]*;",
+      "patterns": [
+        {
+          "include": "source.zig"
+        }
+      ]
+    },
+    "multiline-zdef": {
+      "begin": "\\b(zdef)\\b\\s*\\(\\s*(\"[a-zA-Z_0-9/\\\\\\.]+\")\\s*,\\s*`",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.buzz"
+        },
+        "2": {
+          "name": "string.quoted.double.buzz"
+        }
+      },
+      "end": "`\\s*\\)[\\n\\r\\s]*;",
+      "patterns": [
+        {
+          "include": "source.zig"
+        }
+      ]
+    },
+    "namespace": {
+      "match": "(namespace)\\s+([a-zA-Z][a-zA-Z0-9_\\\\]+)\\s*;",
+      "name": "meta.namespace.php",
+      "captures": {
+        "1": {
+          "name": "keyword.other.namespace.php"
+        },
+        "2": {
+          "name": "entity.name.type.namespace.php",
+          "patterns": [
+            {
+              "match": "\\\\",
+              "name": "punctuation.separator.inheritance.php"
+            }
+          ]
         }
       }
     }

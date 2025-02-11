@@ -1,10 +1,10 @@
 {
   "name": "buzz",
-  "displayName": "buzz",
+  "displayName": "buzz-language",
   "description": "Language support for the buzz programming language",
-  "version": "0.0.1",
+  "version": "0.5.0",
   "publisher": "giann",
-  "license": "SEE LICENSE IN LICENSE.txt",
+  "license": "MIT",
   "homepage": "https://github.com/buzz-language/code/blob/main/README.md",
   "bugs": {
     "url": "https://github.com/buzz-language/code/issues"
@@ -16,18 +16,25 @@
   "engines": {
     "vscode": "^1.68.0"
   },
-  "icon": "https://github.com/buzz-language/code/raw/main/logo.png",
+  "icon": "logo.png",
   "galleryBanner": {
     "color": "#221328",
     "theme": "dark"
   },
-  "categories": ["Programming Languages"],
+  "categories": [
+    "Programming Languages"
+  ],
   "contributes": {
     "languages": [
       {
         "id": "buzz",
-        "aliases": ["buzz", "buzz"],
-        "extensions": ["buzz"],
+        "aliases": [
+          "buzz",
+          "buzz"
+        ],
+        "extensions": [
+          "buzz"
+        ],
         "configuration": "./language-configuration.json"
       }
     ],
@@ -35,7 +42,10 @@
       {
         "language": "buzz",
         "scopeName": "source.buzz",
-        "path": "./syntaxes/buzz.tmLanguage.json"
+        "path": "./syntaxes/buzz.tmLanguage.json",
+        "embeddedLanguages": {
+          "source.zig": "zig"
+        }
       }
     ],
     "problemMatchers": [

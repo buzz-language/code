@@ -29,11 +29,11 @@ export function activate (context: ExtensionContext) {
   startClient(context)
 }
 
-function startClient (context: ExtensionContext): Promise<void> {
+function startClient (_: ExtensionContext): Promise<void> {
   const configuration = workspace.getConfiguration('buzz')
   const lspPath = configuration.get(
     'path',
-    '/Users/giann/git/buzz/tools/lsp.sh'
+    'buzz_lsp'
   )
 
   let serverOptions: ServerOptions = {

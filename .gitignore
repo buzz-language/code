@@ -2,3 +2,7 @@
 .vscode
 node_modules/
 out/
+.npm
+.npm-cache
+AGENTS.md
+log.txt

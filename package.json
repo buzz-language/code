@@ -2,7 +2,7 @@
   "name": "buzz",
   "displayName": "buzz-language",
   "description": "Language support for the buzz programming language",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "publisher": "giann",
   "license": "MIT",
   "homepage": "https://github.com/buzz-language/code/blob/main/README.md",
@@ -14,7 +14,7 @@
     "url": "https://github.com/buzz-language/code.git"
   },
   "engines": {
-    "vscode": "^1.68.0"
+    "vscode": "^1.75.0"
   },
   "icon": "logo.png",
   "galleryBanner": {
@@ -48,86 +48,128 @@
         }
       }
     ],
-    "problemMatchers": [
-      {
-        "owner": "buzz",
-        "fileLocation": ["autoDetect", "${workspaceFolder}"],
-        "pattern": [
-          {
-            "regexp": "^([^:]+):(\\d+):(\\d+): (Syntax|Compile)? (error): (.*)+",
-            "file": 1,
-            "line": 2,
-            "column": 3,
-            "severity": 5,
-            "message": 6
-          }
-        ]
-      }
-    ],
     "commands": [
       {
-        "command": "buzz.start",
+        "command": "buzz.start_lsp",
         "title": "Start Server",
         "category": "Buzz Language Server"
       },
       {
-        "command": "buzz.stop",
+        "command": "buzz.stop_lsp",
         "title": "Stop Server",
         "category": "Buzz Language Server"
       },
       {
-        "command": "buzz.restart",
+        "command": "buzz.restart_lsp",
         "title": "Restart Server",
         "category": "Buzz Language Server"
       }
     ],
     "configuration": {
       "type": "object",
-      "title": "Buzz Language Server",
+      "title": "Buzz",
       "properties": {
         "buzz.trace.server": {
           "scope": "window",
           "type": "string",
-          "enum": ["off", "messages", "verbose"],
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
           "default": "off",
           "description": "Traces the communication between VS Code and the language server."
         },
-        "buzz.path": {
+        "buzz.lsp_path": {
           "scope": "resource",
           "type": "string",
           "description": "Path to buzz lsp",
-          "format": "path"
+          "format": "path",
+          "default": "buzz_lsp"
+        },
+        "buzz.debugger_path": {
+          "scope": "resource",
+          "type": "string",
+          "description": "Path to buzz debugger",
+          "format": "path",
+          "default": "buzz_debugger"
+        },
+        "buzz.debugger_log_file": {
+          "scope": "resource",
+          "type": "string",
+          "description": "Log file for the debugger",
+          "format": "path",
+          "default": "log.txt"
         }
       }
-    }
+    },
+    "breakpoints": [
+      {
+        "language": "buzz"
+      }
+    ],
+    "debuggers": [
+      {
+        "type": "buzz",
+        "label": "buzz debugger",
+        "program": "./out/adapter.js",
+        "runtime": "node",
+        "languages": [
+          "buzz"
+        ],
+        "configurationAttributes": {
+          "launch": {
+            "required": [
+              "program"
+            ],
+            "properties": {
+              "program": {
+                "type": "string",
+                "description": "Path to your buzz program"
+              }
+            }
+          }
+        },
+        "initialConfigurations": [
+          {
+            "type": "buzz",
+            "request": "launch",
+            "name": "Launch buzz program",
+            "program": "${file}"
+          }
+        ]
+      }
+    ]
   },
-  "activationEvents": ["onLanguage:buzz"],
+  "activationEvents": [
+    "onDebug:buzz",
+    "onDebugAdapterProtocolTracker:buzz"
+  ],
   "main": "./out/extension.js",
   "scripts": {
     "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "lint": "eslint src --ext ts",
-    "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
-    "test": "node ./out/test/runTest.js"
+    "compile": "node_modules/.bin/tsc -p ./",
+    "lint": "node_modules/.bin/eslint src --ext ts",
+    "watch": "node_modules/.bin/tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint"
   },
   "dependencies": {
-    "@types/mkdirp": "^1.0.2",
-    "axios": "^0.27.2",
-    "mkdirp": "^1.0.4",
-    "vscode-languageclient": "8.0.2-next.5"
+    "@types/mkdirp": "^2.0.0",
+    "axios": "^1.12.2",
+    "mkdirp": "^3.0.1",
+    "vscode-languageclient": "9.0.1"
   },
   "devDependencies": {
-    "@types/glob": "^7.2.0",
-    "@types/mocha": "^9.1.1",
-    "@types/node": "^18.0.0",
-    "@types/vscode": "^1.68.0",
-    "@typescript-eslint/eslint-plugin": "^5.29.0",
-    "@typescript-eslint/parser": "^5.29.0",
-    "eslint": "^8.18.0",
-    "glob": "^8.0.3",
-    "mocha": "^10.0.0",
-    "typescript": "^4.7.4",
-    "vscode-test": "^1.3.0"
+    "@types/glob": "^9.0.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^24.8.1",
+    "@types/vscode": "^1.105.0",
+    "@typescript-eslint/eslint-plugin": "^8.46.1",
+    "@typescript-eslint/parser": "^8.46.1",
+    "eslint": "^9.37.0",
+    "glob": "^11.0.3",
+    "mocha": "^11.7.4",
+    "typescript": "5.5.3",
+    "vscode-test": "^1.6.1"
   }
 }

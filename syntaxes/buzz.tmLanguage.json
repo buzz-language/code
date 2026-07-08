@@ -62,7 +62,11 @@
       "patterns": [
         {
           "name": "keyword.control.buzz",
-          "match": "\\b(typeof|type|zdef|void|static|extern|import|export|from|test|as|in|while|if|else|fun|try|catch|throw|constructor|return|switch|default|break|for|foreach|do|until|continue|resolve|resume|yield|any|out|var|final|mut)\\b"
+          "match": "\\bas(?:\\?|!)(?=\\s)"
+        },
+        {
+          "name": "keyword.control.buzz",
+          "match": "\\b(typeof|type|zdef|void|static|extern|import|export|from|test|as|in|while|if|else|fun|try|catch|throw|constructor|return|switch|default|break|for|foreach|do|until|continue|resolve|resume|yield|any|out|var|final|mut|match)\\b"
         },
         {
           "name": "keyword.operator.assignment.buzz",
